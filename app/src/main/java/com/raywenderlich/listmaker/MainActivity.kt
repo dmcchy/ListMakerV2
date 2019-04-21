@@ -27,9 +27,9 @@ class MainActivity : AppCompatActivity() {
 
         // Uncomment later, after the ViewAdapter class "ListSelectionRecyclerViewAdapter" is created
 
-        // listsRecyclerView = findViewById(R.id.lists_recyclerview)
-        // listsRecyclerView.layoutManager = LinearLayoutManager(this)
-        // listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter()
+        listsRecyclerView = findViewById(R.id.lists_recyclerview)
+        listsRecyclerView.layoutManager = LinearLayoutManager(this)
+        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
