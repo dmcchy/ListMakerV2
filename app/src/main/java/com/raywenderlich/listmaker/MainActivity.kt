@@ -24,8 +24,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            // Ah, here do we hook the (FAB) for listening behaviours.
+            showCreateListDialog()
+
+            // This was for example purposes that was generated as a placeholder when selecting
+            // the initial theme.
+            // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
         }
 
         // Uncomment later, after the ViewAdapter class "ListSelectionRecyclerViewAdapter" is created
@@ -55,10 +59,12 @@ class MainActivity : AppCompatActivity() {
         val dialogTitle = getString(R.string.name_of_list)
         val positiveButtonTitle = getString(R.string.create_list)
 
-        // Add a dialogue in this context
+        // Add a "text" dialogue in this context
         val builder = AlertDialog.Builder(this)
+        // This is imported from android
         var listTitleEditText = EditText(this)
-        listTitleEditText.inputType = InputType.TYPE_CLASS_TEXT
+        // This is a config
+        listTitleEditText.inputType = InputType.TYPE_CLASS_TEXT // Can also be typed, "number"
 
         builder.setTitle(dialogTitle)
         builder.setView(listTitleEditText)
@@ -66,5 +72,7 @@ class MainActivity : AppCompatActivity() {
         builder.setPositiveButton(positiveButtonTitle) {dialog, i ->
             dialog.dismiss()
         }
+
+        builder.create().show()
     }
 }
