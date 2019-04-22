@@ -12,7 +12,7 @@ class ListSelectionRecyclerViewAdapter:
 
 
     // Mock data to show our recycler view is working.
-    var listTitles = arrayOf("Gel", "Chester", "Demby", "Paolo")
+    var listTitles = arrayOf("Gel", "Chester", "Demby", "Paolo", "Shellane")
 
     // This lifecycle is OF TYPE ListSelectionViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListSelectionViewHolder {
