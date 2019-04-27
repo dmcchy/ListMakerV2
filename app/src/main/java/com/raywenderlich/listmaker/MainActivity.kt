@@ -15,6 +15,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    // This is to read and write the contents of my sharedPreferences file
+    val listDataManager: ListDataManager = ListDataManager(this)
+
     // Create a RecyclerView some time in the "future".
     lateinit var listsRecyclerView: RecyclerView
 
@@ -32,10 +35,14 @@ class MainActivity : AppCompatActivity() {
             // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
         }
 
+        val lists = listDataManager.readLists()
+
         // Uncomment later, after the ViewAdapter class "ListSelectionRecyclerViewAdapter" is created
         listsRecyclerView = findViewById(R.id.lists_recyclerview)
         listsRecyclerView.layoutManager = LinearLayoutManager(this)
-        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter()
+
+        // Ooooh now we pass it here. lol
+        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -70,6 +77,17 @@ class MainActivity : AppCompatActivity() {
         builder.setView(listTitleEditText)
 
         builder.setPositiveButton(positiveButtonTitle) {dialog, i ->
+            // Ok I think here's where we store the newly added elements captured in dialog.
+            val list = TaskList(listTitleEditText.text.toString())
+            listDataManager.saveList(list)
+
+            // WE are reusing my adapter created early on the display arrays.
+            // We're now adding an addList function.
+            val recyclerAdapter = listsRecyclerView.adapter as
+                    ListSelectionRecyclerViewAdapter
+            recyclerAdapter.addList(list)
+
+
             dialog.dismiss()
         }
 

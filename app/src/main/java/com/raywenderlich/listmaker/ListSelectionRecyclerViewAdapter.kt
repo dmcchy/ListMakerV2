@@ -6,7 +6,9 @@ import android.view.ViewGroup
 
 // You are a RecycleView.Adapter which will hold
 // Views of Type "ListSelectionViewHolder"
-class ListSelectionRecyclerViewAdapter:
+
+// This will now accept a dynamic file from our MainActivity.kt
+class ListSelectionRecyclerViewAdapter(val lists: ArrayList<TaskList>):
     RecyclerView.Adapter<ListSelectionViewHolder>()
 {
 
@@ -30,7 +32,7 @@ class ListSelectionRecyclerViewAdapter:
 
     override fun getItemCount(): Int {
         // I want my RecyclerView to have items as many as the mock data
-        return listTitles.size
+        return lists.size
     }
 
     override fun onBindViewHolder(holder: ListSelectionViewHolder, position: Int) {
@@ -38,11 +40,26 @@ class ListSelectionRecyclerViewAdapter:
         // declarative sorts of programming where you just configure it, and it loops itself
         // like a data-binding javascript framework?
         if (holder != null) {
+            // This is old code that still relied on the static data
+            // holder.listPosition.text = (position + 100).toString()
+            // holder.listTitle.text = listTitles[position]
+
+            // This is the new code that now relies on the passed data
             holder.listPosition.text = (position + 100).toString()
-            holder.listTitle.text = listTitles[position]
+            // oooh so now it uses the ".get" method for this lists object since
+            // we are no longer using an array.
+            holder.listTitle.text = lists.get(position).name
         }
     }
     // This is where's im excited about.
 
+    fun addList(list: TaskList) {
+        lists.add(list)
+
+        // whohohohoh every time you make changes to your object
+        // call this "built-in" method for your RecyclerViewAdapter class
+        // to inform it that data has been added and it should re render
+        notifyDataSetChanged()
+    }
 
 }
