@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity(),
     // Activity extras to be passed to other activities.
     companion object {
         val INTENT_LIST_KEY = "list"
+        val LIST_DETAIL_REQUEST_CODE = 123
     }
 
     // This is to read and write the contents of my sharedPreferences file
@@ -50,6 +51,33 @@ class MainActivity : AppCompatActivity(),
         listsRecyclerView.layoutManager = LinearLayoutManager(this)
 
         // Ooooh now we pass it here. lol
+        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists, this)
+    }
+
+    /**
+     * This code listens to any activity this code has started that is wanting to pass back data.
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == LIST_DETAIL_REQUEST_CODE) {
+
+            /**
+             * If I get results from ListDetailActivity, I save it into my
+             * listDataManager object.
+             *
+             * So this is the way to duplicating listDataManager in storing our data.
+             */
+
+            data?.let {
+                listDataManager.saveList(data.getParcelableExtra(INTENT_LIST_KEY))
+                updateLists()
+            }
+        }
+    }
+
+    private fun updateLists() {
+        val lists = listDataManager.readLists()
         listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists, this)
     }
 
@@ -111,8 +139,10 @@ class MainActivity : AppCompatActivity(),
         // Adding an extra info to tell the new activity, "hey I want to display a list"
         listDetailIntent.putExtra(INTENT_LIST_KEY, list)
 
-        // Execute the move to another new activity
-        startActivity(listDetailIntent)
+        // Execute the move to another new activity,
+        // but now we have "ForResult" which means that this activity opening the new activity
+        // EXPECTS to hear something back from it.
+        startActivityForResult(listDetailIntent, LIST_DETAIL_REQUEST_CODE)
     }
 
     override fun listItemClicked(list: TaskList) {

@@ -1,5 +1,7 @@
 package com.raywenderlich.listmaker
 
+import android.app.Activity
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -14,6 +16,17 @@ class ListDetailActivity : AppCompatActivity() {
     lateinit var addTaskButton: FloatingActionButton
     lateinit var listItemsRecyclerView: RecyclerView
     lateinit var list: TaskList
+
+    override fun onBackPressed() {
+        val bundle = Bundle()
+        // Here's where I wrap my data back to my activity in order to save it?
+        bundle.putParcelable(MainActivity.INTENT_LIST_KEY, list)
+
+        val intent = Intent()
+        intent.putExtras(bundle)
+        setResult(Activity.RESULT_OK, intent)
+        super.onBackPressed()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
