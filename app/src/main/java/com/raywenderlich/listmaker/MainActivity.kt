@@ -1,5 +1,6 @@
 package com.raywenderlich.listmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
@@ -13,7 +14,14 @@ import android.widget.EditText
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+        ListSelectionRecyclerViewAdapter.ListSelectionRecyclerViewClickListener
+{
+
+    // Activity extras to be passed to other activities.
+    companion object {
+        val INTENT_LIST_KEY = "list"
+    }
 
     // This is to read and write the contents of my sharedPreferences file
     val listDataManager: ListDataManager = ListDataManager(this)
@@ -42,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         listsRecyclerView.layoutManager = LinearLayoutManager(this)
 
         // Ooooh now we pass it here. lol
-        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists)
+        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -89,8 +97,25 @@ class MainActivity : AppCompatActivity() {
 
 
             dialog.dismiss()
+            // After creating a new list, pass it to the new activity.
+            showListDetail(list)
         }
 
         builder.create().show()
+    }
+
+    private fun showListDetail(list: TaskList) {
+        // Pass the intent to next Activity
+        val listDetailIntent = Intent(this, ListDetailActivity::class.java)
+
+        // Adding an extra info to tell the new activity, "hey I want to display a list"
+        listDetailIntent.putExtra(INTENT_LIST_KEY, list)
+
+        // Execute the move to another new activity
+        startActivity(listDetailIntent)
+    }
+
+    override fun listItemClicked(list: TaskList) {
+        showListDetail(list)
     }
 }

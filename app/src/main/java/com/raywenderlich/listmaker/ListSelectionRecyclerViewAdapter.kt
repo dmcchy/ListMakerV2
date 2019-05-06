@@ -8,13 +8,21 @@ import android.view.ViewGroup
 // Views of Type "ListSelectionViewHolder"
 
 // This will now accept a dynamic file from our MainActivity.kt
-class ListSelectionRecyclerViewAdapter(val lists: ArrayList<TaskList>):
+class ListSelectionRecyclerViewAdapter(
+    val lists: ArrayList<TaskList>,
+    val clickListener: ListSelectionRecyclerViewClickListener
+):
     RecyclerView.Adapter<ListSelectionViewHolder>()
 {
 
 
     // Mock data to show our recycler view is working.
     var listTitles = arrayOf("Gel", "Chester", "Demby", "Paolo", "Shellane")
+
+    // Need this to bind our entries onClick to show the tasks they contain
+    interface ListSelectionRecyclerViewClickListener {
+        fun listItemClicked(list: TaskList)
+    }
 
     // This lifecycle is OF TYPE ListSelectionViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListSelectionViewHolder {
@@ -49,6 +57,11 @@ class ListSelectionRecyclerViewAdapter(val lists: ArrayList<TaskList>):
             // oooh so now it uses the ".get" method for this lists object since
             // we are no longer using an array.
             holder.listTitle.text = lists.get(position).name
+
+            // This is how to add an on click listener
+            holder.itemView.setOnClickListener() {
+                clickListener.listItemClicked(lists.get(position))
+            }
         }
     }
     // This is where's im excited about.

@@ -15,7 +15,9 @@ class ListDataManager(val context: Context) {
             .getDefaultSharedPreferences(context)
             .edit() // Called edit let's me write data to this store.
 
-        // Save and persist method.
+        Log.v("HashSet", list.tasks.size.toString())
+
+        // Save and persist method.',
         // list.name is the "key" (very important), our "value"
         // are the tasks which is converted to a "HashSet"
         sharedPreferences.putStringSet(list.name, list.tasks.toHashSet())
