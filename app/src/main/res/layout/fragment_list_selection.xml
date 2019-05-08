@@ -6,14 +6,13 @@
              tools:context=".ListSelectionFragment">
 
     <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" tools:layout_editor_absoluteY="8dp" tools:layout_editor_absoluteX="8dp"
-            android:id="@+id/lists_recyclerview"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" tools:layout_editor_absoluteY="8dp" tools:layout_editor_absoluteX="8dp"
+        android:id="@+id/lists_recyclerview"/>
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_items_reyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </FrameLayout>

@@ -1,29 +1,14 @@
 package com.raywenderlich.listmaker
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [ListSelectionFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [ListSelectionFragment.newInstance] factory method to
- * create an instance of this fragment.
- *
- */
 class ListSelectionFragment : Fragment(),
         ListSelectionRecyclerViewAdapter.ListSelectionRecyclerViewClickListener
 {
@@ -33,23 +18,14 @@ class ListSelectionFragment : Fragment(),
     lateinit var listsRecyclerView: RecyclerView
 
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListSelectionFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
+
         fun newInstance(): ListSelectionFragment {
-            return ListSelectionFragment()
+            val fragment = ListSelectionFragment()
+
+            return fragment
         }
     }
 
@@ -90,21 +66,17 @@ class ListSelectionFragment : Fragment(),
     // New lifecycle used in book.
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         val lists = listDataManager.readLists()
-
         view?.let {
-            listsRecyclerView = it.findViewById(R.id.lists_recyclerview)
-            listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists, this)
+            listsRecyclerView = it.findViewById<RecyclerView>(R.id.lists_recyclerview)
+            listsRecyclerView.layoutManager = LinearLayoutManager(activity)
+            listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists,
+                this)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
