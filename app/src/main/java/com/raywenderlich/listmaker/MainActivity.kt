@@ -1,6 +1,7 @@
 package com.raywenderlich.listmaker
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
@@ -11,12 +12,18 @@ import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.FrameLayout
 
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(),
-        ListSelectionRecyclerViewAdapter.ListSelectionRecyclerViewClickListener
+        ListSelectionFragment.OnFragmentInteractionListener
 {
+
+    private var fragmentContainer: FrameLayout? = null
+
+    private var listSelectionFragment: ListSelectionFragment =
+        ListSelectionFragment.newInstance()
 
     // Activity extras to be passed to other activities.
     companion object {
@@ -24,16 +31,31 @@ class MainActivity : AppCompatActivity(),
         val LIST_DETAIL_REQUEST_CODE = 123
     }
 
+    /**
+     * Variables below moved to context
+     */
+
     // This is to read and write the contents of my sharedPreferences file
-    val listDataManager: ListDataManager = ListDataManager(this)
+    // val listDataManager: ListDataManager = ListDataManager(this)
 
     // Create a RecyclerView some time in the "future".
-    lateinit var listsRecyclerView: RecyclerView
+    // lateinit var listsRecyclerView: RecyclerView
+
+    /**
+     * end of variables below moved to context
+     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        fragmentContainer = findViewById(R.id.fragment_container)
+
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.fragment_container, listSelectionFragment)
+            .commit()
 
         fab.setOnClickListener { view ->
             // Ah, here do we hook the (FAB) for listening behaviours.
@@ -44,6 +66,7 @@ class MainActivity : AppCompatActivity(),
             // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
         }
 
+        /*
         val lists = listDataManager.readLists()
 
         // Uncomment later, after the ViewAdapter class "ListSelectionRecyclerViewAdapter" is created
@@ -52,6 +75,7 @@ class MainActivity : AppCompatActivity(),
 
         // Ooooh now we pass it here. lol
         listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists, this)
+        */
     }
 
     /**
@@ -70,15 +94,12 @@ class MainActivity : AppCompatActivity(),
              */
 
             data?.let {
-                listDataManager.saveList(data.getParcelableExtra(INTENT_LIST_KEY))
-                updateLists()
+                // Fragment will now handle this budddy, sorry.
+                // listDataManager.saveList(data.getParcelableExtra(INTENT_LIST_KEY))
+
+                listSelectionFragment.saveList(data.getParcelableExtra(INTENT_LIST_KEY))
             }
         }
-    }
-
-    private fun updateLists() {
-        val lists = listDataManager.readLists()
-        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -115,13 +136,7 @@ class MainActivity : AppCompatActivity(),
         builder.setPositiveButton(positiveButtonTitle) {dialog, i ->
             // Ok I think here's where we store the newly added elements captured in dialog.
             val list = TaskList(listTitleEditText.text.toString())
-            listDataManager.saveList(list)
-
-            // WE are reusing my adapter created early on the display arrays.
-            // We're now adding an addList function.
-            val recyclerAdapter = listsRecyclerView.adapter as
-                    ListSelectionRecyclerViewAdapter
-            recyclerAdapter.addList(list)
+            listSelectionFragment.addList(list)
 
 
             dialog.dismiss()
@@ -145,7 +160,7 @@ class MainActivity : AppCompatActivity(),
         startActivityForResult(listDetailIntent, LIST_DETAIL_REQUEST_CODE)
     }
 
-    override fun listItemClicked(list: TaskList) {
+    override fun onListItemClicked(list: TaskList) {
         showListDetail(list)
     }
 }
