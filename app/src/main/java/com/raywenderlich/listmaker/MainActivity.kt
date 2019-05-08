@@ -41,8 +41,22 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        // listSelectionFragment = supportFragmentManager.findFragmentById(R.id.list_selection_fragment) as ListSelectionFragment
+
+
+        supportFragmentManager.beginTransaction()
+            .add(
+                R.id.fragment_container,
+                listSelectionFragment!!,
+                getString(R.string.list_fragment_tag))
+            .addToBackStack(null)
+            .commit()
+
+
+        /*supportFragmentManager.beginTransaction().add(R.id.list_selection_fragment)
+
         listSelectionFragment = supportFragmentManager.findFragmentById(R.id.list_selection_fragment)
-            as ListSelectionFragment
+                as ListSelectionFragment*/
 
         fragmentContainer = findViewById(R.id.fragment_container)
 

@@ -29,7 +29,7 @@ class ListDetailFragment : Fragment() {
         val view = inflater!!.inflate(R.layout.fragment_list_detail, container,
             false)
         view?.let {
-            listItemsRecyclerView = it.findViewById(R.id.list_items_reyclerview)
+            listItemsRecyclerView = it.findViewById<RecyclerView>(R.id.list_items_reyclerview)
             listItemsRecyclerView.adapter = ListItemsRecyclerViewAdapter(list)
             listItemsRecyclerView.layoutManager = LinearLayoutManager(activity)
         }
